@@ -1,0 +1,12 @@
+[submodule "cpp-httplib"]
+	path = cpp-httplib
+	url = https://github.com/yhirose/cpp-httplib.git
+[submodule "filewatch"]
+	path = filewatch
+	url = https://github.com/ThomasMonkman/filewatch.git
+[submodule "tojson"]
+	path = tojson
+	url = https://github.com/mircodezorzi/tojson.git
+[submodule "yaml-cpp"]
+	path = yaml-cpp
+	url = https://github.com/jbeder/yaml-cpp.git
