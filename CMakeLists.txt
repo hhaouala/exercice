@@ -21,6 +21,7 @@ endif()
 file(GLOB files "${CMAKE_SOURCE_DIR}/patchs/*.patch")
 foreach(file ${files})
   get_filename_component(filename_we ${file} NAME_WE)
+  message(STATUS "Patch applied: ${filename_we}.patch vs ${CMAKE_SOURCE_DIR}/patchs/.${filename_we}.patch.applied")
   if(NOT EXISTS ${CMAKE_SOURCE_DIR}/patchs/.${filename_we}.patch.applied)
     execute_process(
           COMMAND patch -p1 

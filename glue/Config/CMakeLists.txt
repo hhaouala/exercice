@@ -21,7 +21,10 @@ foreach(package yaml-cpp
                 nlohmann_json
                 FileWatch
 )
-    find_package(${package} REQUIRED)
+    if(NOT TARGET ${package})
+        find_package(${package} REQUIRED)
+    endif()
+
     target_include_directories(${PROJECT_NAME}
       PRIVATE
         $<TARGET_PROPERTY:${package},INTERFACE_INCLUDE_DIRECTORIES> )
