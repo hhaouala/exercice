@@ -4,55 +4,49 @@
 #ifndef __CONFIG_WATCHER__
 #define __CONFIG_WATCHER__
 
-/** \ingroup focus_manager */
-/** \addtogroup FocusManager
+/** \ingroup config */
+/** \addtogroup config
 * @{
 */
-/**
- * This class is designed to define the FocusManager.
- */
 namespace config
 {  
 
   typedef void (*function_ptr_generic)(void* obj, int eventId, void* data);
   using CallbackVector = std::vector<std::vector<std::pair<void*,function_ptr_generic>>*>;
 
-   //!  A test class. 
-  /*!
-    A more elaborate class description.
-  */
-   
+  /**
+   * This class is meant to abstract the state machine of the monitoring
+   * framework/lib oF file changes (like inotify) and its APIs/configuration.
+   * By providing virtual methodes like start, stop, configure, the startup sequence
+   * is independent of the framework, and can be implemented.
+   * Check Main for the startup sequence.
+   *
+   */
   class ConfigWatcher
   {
     public:
       
-      /// Brief description.
-      /** Detailed description. */
       ConfigWatcher(){}
-      
-      /// Brief description.
-      /** Detailed description. */
       virtual ~ConfigWatcher(){}
       
       virtual int start() = 0;
-      /*! \brief Brief description.
-       *         Brief description continued.
-       *
-       *  Detailed description starts here.
-       */
       virtual int configure() = 0;
       virtual int stop() = 0;
       virtual int restart() = 0;
 
 
-      //! Brief description, which is
-    //! really a detailed description since it spans multiple lines.
-    /*! Another detailed description!
+     /**
+     * @brief This API will pass the funtion pointer to the config watcher which will
+     * be called when the event msgType is received in the condig watcher
+       @param [in] msgType : the message to be notifuied on
+       @param [in,out] obj : pointer on the object needing the notification (not thread safe)
+       @param [in] function_pointer : the notification function to be called once the event (msgType) takes place
+     * @return  0 on sucess
      */
       virtual int register_callback(int msgType, void* obj, function_ptr_generic function_pointer) = 0;
 
   };
 
 }
-/** @} end of group FocusManager */
+/** @} end of group config */
 #endif /*__CONFIG_WATCHER__*/

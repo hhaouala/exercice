@@ -20,6 +20,10 @@ namespace config
     stop();
   }
 
+  /**
+   * @brief This API will be called by YAMLtoJsonConfigManager::configure() when the
+   * DATA_HOLDER type is std::map<std::string, nlohmann::json>.
+   */
   int store_paths(nlohmann::json paths, std::map<std::string, nlohmann::json> &map){
     for (auto &el : paths.items())
     {
@@ -32,6 +36,11 @@ namespace config
     return 0;
   }
 
+
+  /**
+   * @brief This API will be called by YAMLtoJsonConfigManager::configure() when the
+   * DATA_HOLDER type is std::vector<std::string>.
+   */
   int store_paths(nlohmann::json paths, std::vector<std::string> &vect){
     for (auto &el : paths.items())
     {

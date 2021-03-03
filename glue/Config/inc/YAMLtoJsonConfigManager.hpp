@@ -3,7 +3,13 @@
 
 namespace config
 {
-  
+  /**
+   * This class implements GenericConfigManager with a template.
+   * The idea of the template is to make the DATA_HOLDER adaptable
+   * to the container on which we'd like to get the APIs list
+   * parsed with the config manager. 
+   *
+   */  
   template<typename DATA_HOLDER>  
   class YAMLtoJsonConfigManager : GenericConfigManager
   {

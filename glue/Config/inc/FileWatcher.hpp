@@ -4,30 +4,26 @@
 namespace config
 {  
 
-  // #define CALLBACK_ARGS const std::string& file, const filewatch::Event event_type, void *obj
-  // #define CALLBACK_ARGS_TYPE void(CALLBACK_ARGS)
-  //typedef std::function<unsigned int(const std::string& , const filewatch::Event, void *)> CALLBACK_SIGNATURE;
-  
   class FileWatcher : ConfigWatcher
   {
     public:
       FileWatcher(std::string fileWatched);
       ~FileWatcher();
       
-      int start();
-      int configure();
-      int stop();
-      int restart();
+      int start() override;
+      int configure() override;
+      int stop() override;
+      int restart() override;
       
-      int register_callback(int msgType, void* obj, function_ptr_generic function_pointer);
+      int register_callback(int msgType, void* obj, function_ptr_generic function_pointer) override;
 
     private:
 
-      std::mutex v_mtx;
-      CallbackVector callbacks_for_event = CallbackVector (8);
+      std::mutex v_mtx; /**< mutex to protect the access to the vector of the callbacks registred on the config watcher */
+      CallbackVector callbacks_for_event = CallbackVector (8); /**< vector of the callbacks registred on the config watcher */
       
-      std::string fileWatched;
-      filewatch::FileWatch<std::string> *filewatcher;
+      std::string fileWatched; /**< the full path to the config file of the server */
+      filewatch::FileWatch<std::string> *filewatcher; /**< pointer to the filewatch::FileWatch lib to monitor the config file */
   };
 
 }
