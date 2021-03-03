@@ -33,18 +33,14 @@ index 0000000..7a3a1d3
 +
 +target_include_directories(${PROJECT_NAME}
 +    INTERFACE
-+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/rapidxml.hpp>
-+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/rapidxml_iterators.hpp>
-+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/rapidxml_print.hpp>
-+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/rapidxml_utils.hpp>
-+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
++        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 +        $<INSTALL_INTERFACE:${PACKAGE_INSTALL_INCLUDE_DIR}>
 +)
 +
-+set(${PROJECT_NAME}_PUBLIC_HEADER $(CMAKE_CURRENT_SOURCE_DIR)/rapidxml.hpp
-+                                  $(CMAKE_CURRENT_SOURCE_DIR)/rapidxml_iterators.hpp
-+                                  $(CMAKE_CURRENT_SOURCE_DIR)/rapidxml_print.hpp
-+                                  $(CMAKE_CURRENT_SOURCE_DIR)/rapidxml_utils.hpp)
++set(${PROJECT_NAME}_PUBLIC_HEADER rapidxml.hpp
++                                  rapidxml_iterators.hpp
++                                  rapidxml_print.hpp
++                                  rapidxml_utils.hpp)
 +
 +set_target_properties(${PROJECT_NAME}
 +    PROPERTIES

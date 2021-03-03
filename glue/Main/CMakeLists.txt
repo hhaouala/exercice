@@ -16,8 +16,17 @@ include(CMakePackageConfigHelpers)
 add_executable(${PROJECT_NAME})
 
 # Dependency resolving ---------------------------------------------------------
+if(NOT TARGET nlohmann_json)
+find_package(nlohmann_json REQUIRED)
+endif()
+target_include_directories(${PROJECT_NAME}
+  PRIVATE
+    $<TARGET_PROPERTY:nlohmann_json::nlohmann_json,INTERFACE_INCLUDE_DIRECTORIES> )
+
 foreach(package ConfigManager
                 HttpLibServer
+                toJSON
+                rapidxml
 )
   if(NOT TARGET ${package}::${package})
     find_package(${package} REQUIRED)
@@ -32,7 +41,6 @@ foreach(package ConfigManager
   
 endforeach()
 
-find_package(FileWatch REQUIRED)
 target_include_directories(${PROJECT_NAME}
     PRIVATE
       $<TARGET_PROPERTY:FileWatch,INTERFACE_INCLUDE_DIRECTORIES>

@@ -17,21 +17,30 @@ add_library(${PROJECT_NAME} SHARED)
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 # Dependency resolving ---------------------------------------------------------
+if(NOT TARGET nlohmann_json)
+find_package(nlohmann_json REQUIRED)
+endif()
+target_include_directories(${PROJECT_NAME}
+  PRIVATE
+    $<TARGET_PROPERTY:nlohmann_json::nlohmann_json,INTERFACE_INCLUDE_DIRECTORIES> )
+
 
 foreach (package ConfigManager
-                httplib)
+                 httplib
+                 toJSON
+                 rapidxml
+)
     if(NOT TARGET ${package}::${package})
         find_package(${package} REQUIRED)
     endif()
 
     target_include_directories(${PROJECT_NAME}
-    PRIVATE
+      PRIVATE
         $<TARGET_PROPERTY:${package}::${package},INTERFACE_INCLUDE_DIRECTORIES>
     )
             
 endforeach()
 
-find_package(FileWatch REQUIRED)
 target_include_directories(${PROJECT_NAME}
     PRIVATE
         $<TARGET_PROPERTY:FileWatch,INTERFACE_INCLUDE_DIRECTORIES>
@@ -49,7 +58,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 target_sources(${PROJECT_NAME} 
     PRIVATE 
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/HttpLibServer.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/src/HttpLibServer.cpp
 )
 
 target_include_directories(${PROJECT_NAME}

@@ -17,6 +17,7 @@ diff
 +
 +# Dependency resolving ---------------------------------------------------------
 +
++
 +# Configuration ----------------------------------------------------------------
 +
 +# Pacakage setting -------------------------------------------------------------
@@ -31,8 +32,7 @@ diff
 +
 +target_include_directories(${PROJECT_NAME}
 +    INTERFACE
-+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tojson.hpp>
-+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
++        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 +        $<INSTALL_INTERFACE:${PACKAGE_INSTALL_INCLUDE_DIR}>
 +)
 +
@@ -84,3 +84,15 @@ diff
 +              ${CMAKE_CURRENT_BINARY_DIR}/${PACKAGE_NAME}ConfigVersion.cmake
 +    DESTINATION ${PACKAGE_INSTALL_CMAKE_DIR}
 +)
+diff 
+--- a/tojson.hpp
++++ b/tojson.hpp
+@@ -4,7 +4,7 @@
+ 
+ #include <fstream>
+ 
+-#include "json.hpp"
++#include "nlohmann/json.hpp"
+ #include "rapidxml_ext.hpp"
+ 
+ #if __has_cpp_attribute(nodiscard)
