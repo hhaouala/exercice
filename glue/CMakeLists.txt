@@ -14,7 +14,7 @@ include(CMakePackageConfigHelpers)
 
 find_package(Doxygen REQUIRED)
 
-set(DOXYGEN_INPUT_DIR "${PROJECT_SOURCE_DIR}")
+set(DOXYGEN_INPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 set(DOXYGEN_OUTPUT_DIR ${CMAKE_INSTALL_PREFIX}/docs/glue)
 set(DOXYGEN_INDEX_FILE ${DOXYGEN_OUTPUT_DIR}/html/index.html)
 
