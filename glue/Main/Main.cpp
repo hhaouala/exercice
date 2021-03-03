@@ -19,13 +19,44 @@ void set_signal_handler(){
     sigaction(SIGINT,&sa,NULL);
 }
 
+inline bool check_file (const std::string& name) {
+    return ( access( name.c_str(), F_OK ) != -1 );
+}
 
 int main(int argc,char *argv[])
 {
   std::map<std::string, nlohmann::json> apiList;
+  char configFile[200] = {0};
+  int c=0;
 
-  CoreConfigManager config("/mnt/c/Users/PROBOOK/Documents/PERSO/Candidature/3dOutSCALE/Exercice/exercise/glue/build/config.yml");
-  FileWatcher filewatcher("/mnt/c/Users/PROBOOK/Documents/PERSO/Candidature/3dOutSCALE/Exercice/exercise/glue/build/config.yml");
+  while ((c = getopt (argc, argv, "i:h:")) != -1)
+  {
+    switch (c)
+    {
+      case 'i':
+        std::memcpy (configFile, argv[2], sizeof(configFile));
+        if (!check_file(configFile))
+        {
+          std::cerr << std::endl << "use -i to specify the FULL PATH of the yaml file" << std::endl;
+          return -1;
+        }
+        continue;
+
+      case '?':
+      case 'h':
+      default :
+        std::cerr << std::endl << "use -i to specify the full path of the yaml file" << std::endl;
+        return -1;
+
+      case -1:
+        return -1;
+    }
+
+    break;
+  }
+
+  CoreConfigManager config(configFile);
+  FileWatcher filewatcher(configFile);
   HttpLibServer server;
 
   filewatcher.register_callback((int)filewatch::Event::modified, (void*)&server, (function_ptr_generic) server.notification_callback_generic);
