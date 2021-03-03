@@ -9,9 +9,21 @@ The glue component was made withe spirit of wrapping and abstracting the framewo
 ## known limitations
 
 - Support only one yaml configuration file
+- No check on the validity of the YAML file
+- The number of paralle request is handled by the webserver framework (to configure in the future)
+- Request type is not parsed from the config file : both Get/Post are enabled by default
+- Request name is got from / path, and not from operationId
+- Request body is not parsed / used
+- no RPM support yet
+- RPATH is not supported : add to all CMakeLists.txt :
+    set_target_properties(${PROJECT_NAME}
+       PROPERTIES
+           INSTALL_RPATH_USE_LINK_PATH True
+     )
 
 ## Future ameliorations
 
+- Fix known limitations
 - Add the support of other webserver frameworks (other than cpp-httplib) like boost beast
 - Add the support of other yaml parser (from boost)
 - Add the possibility to use std::filesystem (C++17) to minitor configuration changes
@@ -34,6 +46,11 @@ Windows Linux subsystem + g++ (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0 + cmake versio
    make install
 ```
 
+#### Usage
+``` shell
+  cd ../install
+  LD_LIBRARY_PATH=`pwd`/lib ./bin/awesome_server -i <FULL_PATH_TO_YAML_FILE>
+```
 ## Dependencies (to be installed on host computer)
 
 - Doxygen
