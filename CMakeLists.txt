@@ -11,7 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/rapidxml-1.13)
   file(DOWNLOAD "https://freefr.dl.sourceforge.net/project/rapidxml/rapidxml/rapidxml%201.13/rapidxml-1.13.zip" ${CMAKE_CURRENT_SOURCE_DIR}/rapidxml-1.13.zip SHOW_PROGRESS)
   execute_process(
-        COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_CURRENT_SOURCE_DIR}/rapidxml-1.13
+        COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_CURRENT_SOURCE_DIR}/rapidxml
         COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_SOURCE_DIR}/rapidxml-1.13.zip
         WORKING_DIRECTORY  ${CMAKE_CURRENT_SOURCE_DIR}
    )
