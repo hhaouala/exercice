@@ -2,6 +2,12 @@ cmake_minimum_required(VERSION 3.12..3.20)
 
 project (top CXX)
 
+# Enable c++11 as the externals libs are C++ 11
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+
 if (NOT EXIST ${CMAKE_BINARY_DIR}/rapidxml-1.13)
   file(DOWNLOAD "https://freefr.dl.sourceforge.net/project/rapidxml/rapidxml/rapidxml%201.13/rapidxml-1.13.zip" ${CMAKE_CURRENT_SOURCE_DIR}/rapidxml-1.13.zip SHOW_PROGRESS)
   execute_process(

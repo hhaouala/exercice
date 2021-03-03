@@ -1,0 +1,94 @@
+diff --git a/./CMakeLists.txt b/./CMakeLists.txt
+new file mode 100755
+index 0000000..7a3a1d3
+--- /dev/null
++++ b/./CMakeLists.txt
+@@ -0,0 +1,88 @@
++cmake_minimum_required(VERSION 3.12..3.18)
++
++# Project name
++project(rapidxml VERSION 1.13 LANGUAGES C CXX)
++
++# Includes ---------------------------------------------------------------------
++include(GNUInstallDirs)
++include(CMakePackageConfigHelpers)
++
++# Target Declaration -----------------------------------------------------------
++add_library(${PROJECT_NAME} INTERFACE)
++add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
++
++# Dependency resolving ---------------------------------------------------------
++
++# Configuration ----------------------------------------------------------------
++
++# Pacakage setting -------------------------------------------------------------
++set(PACKAGE_NAME ${PROJECT_NAME})
++set(PACKAGE_INSTALL_CMAKE_DIR   ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
++set(PACKAGE_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
++set(PACKAGE_INSTALL_LIBRARY_DIR ${CMAKE_INSTALL_LIBDIR})
++set(PACKAGE_INSTALL_ARCHIVE_DIR ${CMAKE_INSTALL_LIBDIR})
++
++
++# Target Definition ------------------------------------------------------------
++
++target_include_directories(${PROJECT_NAME}
++    INTERFACE
++        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/rapidxml.hpp>
++        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/rapidxml_iterators.hpp>
++        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/rapidxml_print.hpp>
++        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/rapidxml_utils.hpp>
++        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
++        $<INSTALL_INTERFACE:${PACKAGE_INSTALL_INCLUDE_DIR}>
++)
++
++set(${PROJECT_NAME}_PUBLIC_HEADER $(CMAKE_CURRENT_SOURCE_DIR)/rapidxml.hpp
++                                  $(CMAKE_CURRENT_SOURCE_DIR)/rapidxml_iterators.hpp
++                                  $(CMAKE_CURRENT_SOURCE_DIR)/rapidxml_print.hpp
++                                  $(CMAKE_CURRENT_SOURCE_DIR)/rapidxml_utils.hpp)
++
++set_target_properties(${PROJECT_NAME}
++    PROPERTIES
++        PUBLIC_HEADER "${${PROJECT_NAME}_PUBLIC_HEADER}"
++)
++
++
++file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${PACKAGE_NAME}Config.cmake.in
++[=[
++@PACKAGE_INIT@
++
++include(${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@Targets.cmake)
++
++check_required_components(@PROJECT_NAME@)
++]=]
++)
++
++configure_package_config_file(
++        ${CMAKE_CURRENT_BINARY_DIR}/${PACKAGE_NAME}Config.cmake.in
++        ${PACKAGE_NAME}Config.cmake
++    INSTALL_DESTINATION ${PACKAGE_INSTALL_CMAKE_DIR}
++    NO_SET_AND_CHECK_MACRO
++)
++
++write_basic_package_version_file(${PROJECT_NAME}ConfigVersion.cmake
++    COMPATIBILITY AnyNewerVersion
++)
++
++# Installations ----------------------------------------------------------------
++
++## Targets installation
++install(TARGETS ${PROJECT_NAME}
++    EXPORT          ${PROJECT_NAME}Targets
++    PUBLIC_HEADER   DESTINATION ${PACKAGE_INSTALL_INCLUDE_DIR}
++    COMPONENT       interface
++)
++
++## CMake's configurations
++install(EXPORT ${PROJECT_NAME}Targets
++    DESTINATION ${PACKAGE_INSTALL_CMAKE_DIR}
++)
++
++## Package configurations
++install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PACKAGE_NAME}Config.cmake 
++              ${CMAKE_CURRENT_BINARY_DIR}/${PACKAGE_NAME}ConfigVersion.cmake
++    DESTINATION ${PACKAGE_INSTALL_CMAKE_DIR}
++)
