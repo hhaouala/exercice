@@ -1,9 +1,7 @@
 diff --git a/./CMakeLists.txt b/./CMakeLists.txt
-new file mode 100755
-index 0000000..7a3a1d3
 --- /dev/null
 +++ b/./CMakeLists.txt
-@@ -0,0 +1,88 @@
+@@ -0,0 +1,84 @@
 +cmake_minimum_required(VERSION 3.12..3.18)
 +
 +# Project name
