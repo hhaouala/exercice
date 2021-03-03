@@ -13,7 +13,7 @@ if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/rapidxml-1.13)
   execute_process(
         COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_CURRENT_SOURCE_DIR}/rapidxml
         COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_SOURCE_DIR}/rapidxml-1.13.zip -C rapidxml
-        WORKING_DIRECTORY  ${CMAKE_CURRENT_SOURCE_DIR}
+        WORKING_DIRECTORY  ${CMAKE_CURRENT_SOURCE_DIR}/rapidxml
    )
 endif()
 
@@ -41,6 +41,6 @@ endforeach()
 add_subdirectory(cpp-httplib)
 add_subdirectory(filewatch)
 add_subdirectory(yaml-cpp)
-add_subdirectory(rapidxml-1.13)
+add_subdirectory(rapidxml)
 add_subdirectory(toJson)
 add_subdirectory(glue)
