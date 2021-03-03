@@ -51,6 +51,17 @@ Windows Linux subsystem + g++ (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0 + cmake versio
   cd ../install
   LD_LIBRARY_PATH=`pwd`/lib ./bin/awesome_server -i <FULL_PATH_TO_YAML_FILE>
 ```
+
+#### API Documentation (Glue code Only)
+
+To generate API documentation please use (on a project already compiled) :
+``` shell
+  cd build
+  make Doxygen install
+```
+The documentation will be placed under : install/docs/glue/html/index.html
+
+
 ## Dependencies (to be installed on host computer)
 
 - Doxygen
