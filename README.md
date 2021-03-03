@@ -54,7 +54,7 @@ Windows Linux subsystem + g++ (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0 + cmake versio
 
 #### API Documentation (Glue code Only)
 
-To generate API documentation please use (on a project already compiled) :
+To generate API documentation please use (on a project already configured) :
 ``` shell
   cd build
   make Doxygen install
