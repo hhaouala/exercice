@@ -1,6 +1,6 @@
-diff 
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
+diff -rNup tojson/CMakeLists.txt tojson/CMakeLists.txt
+--- tojson/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ tojson/CMakeLists.txt	2021-03-03 03:29:43.445511800 +0100
 @@ -0,0 +1,82 @@
 +cmake_minimum_required(VERSION 3.12..3.18)
 +
@@ -84,9 +84,9 @@ diff
 +              ${CMAKE_CURRENT_BINARY_DIR}/${PACKAGE_NAME}ConfigVersion.cmake
 +    DESTINATION ${PACKAGE_INSTALL_CMAKE_DIR}
 +)
-diff 
---- a/tojson.hpp
-+++ b/tojson.hpp
+diff -rNup tojson/tojson.hpp tojson/tojson.hpp
+--- tojson/tojson.hpp	2021-03-03 11:50:42.372064600 +0100
++++ tojson/tojson.hpp	2021-03-03 03:35:41.173692400 +0100
 @@ -4,7 +4,7 @@
  
  #include <fstream>

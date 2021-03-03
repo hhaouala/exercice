@@ -21,17 +21,16 @@ endif()
 file(GLOB files "${CMAKE_SOURCE_DIR}/patchs/*.patch")
 foreach(file ${files})
   get_filename_component(filename_we ${file} NAME_WE)
-  message(STATUS "Patch applied: ${filename_we}.patch vs ${CMAKE_SOURCE_DIR}/patchs/.${filename_we}.patch.applied")
-  if(NOT EXISTS ${CMAKE_SOURCE_DIR}/patchs/.${filename_we}.patch.applied)
+  if(NOT EXISTS ${CMAKE_SOURCE_DIR}/${filename_we}/.${filename_we}.patch.applied)
     execute_process(
-          COMMAND patch -p1 
+          COMMAND patch -p1 --forward --ignore-whitespace 
           WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/${filename_we}"
           INPUT_FILE "${CMAKE_SOURCE_DIR}/patchs/${filename_we}.patch"
           OUTPUT_VARIABLE OUTPUT
           RESULT_VARIABLE RESULT)
     if (RESULT EQUAL 0)
       message(STATUS "Patch applied: ${filename_we}.patch")
-      file(TOUCH ${CMAKE_SOURCE_DIR}/patchs/.${filename_we}.patch.applied )
+      file(TOUCH ${CMAKE_SOURCE_DIR}/${filename_we}/.${filename_we}.patch.applied )
     else()
        message(STATUS "Failed to apply Patch ${filename_we}.patch : ${OUTPUT} (${RESULT})")
     endif()
