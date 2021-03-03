@@ -8,10 +8,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
-if (NOT EXIST ${CMAKE_BINARY_DIR}/rapidxml-1.13)
+if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/rapidxml-1.13)
   file(DOWNLOAD "https://freefr.dl.sourceforge.net/project/rapidxml/rapidxml/rapidxml%201.13/rapidxml-1.13.zip" ${CMAKE_CURRENT_SOURCE_DIR}/rapidxml-1.13.zip SHOW_PROGRESS)
   execute_process(
-        COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}/rapidxml-1.13
+        COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_CURRENT_SOURCE_DIR}/rapidxml-1.13
         COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_SOURCE_DIR}/rapidxml-1.13.zip
         WORKING_DIRECTORY  ${CMAKE_CURRENT_SOURCE_DIR}
    )
@@ -29,9 +29,18 @@ foreach(file ${files})
           RESULT_VARIABLE RESULT)
     if (RESULT EQUAL 0)
       message(STATUS "Patch applied: ${filename_we}.patch")
-      file({TOUCH ${CMAKE_SOURCE_DIR}/patchs/.${filename_we}.patch.applied)
+      file(TOUCH ${CMAKE_SOURCE_DIR}/patchs/.${filename_we}.patch.applied )
     else()
        message(STATUS "Failed to apply Patch ${filename_we}.patch : ${OUTPUT} (${RESULT})")
     endif()
   endif()
 endforeach()
+
+
+
+add_subdirectory(cpp-httplib)
+add_subdirectory(filewatch)
+add_subdirectory(yaml-cpp)
+add_subdirectory(rapidxml-1.13)
+add_subdirectory(toJson)
+add_subdirectory(glue)
