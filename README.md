@@ -35,7 +35,7 @@ The glue component was made withe spirit of wrapping and abstracting the framewo
 Tested on
 ---------------
 Windows Linux subsystem + g++ (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0 + cmake version 3.20.0-rc2
-
+-
 #### Commands
 ``` shell
    git clone --recurse-submodules https://github.com/hhaouala/exercice.git ; cd exercice
@@ -47,10 +47,15 @@ Windows Linux subsystem + g++ (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0 + cmake versio
 ```
 
 #### Usage
+##### Running the server
+
 ``` shell
   cd ../install
   LD_LIBRARY_PATH=`pwd`/lib ./bin/awesome_server -i <FULL_PATH_TO_YAML_FILE>
 ```
+##### Access API
+
+URI example : http://127.0.0.1:9898/CreateVolume
 
 #### API Documentation (Glue code Only)
 
