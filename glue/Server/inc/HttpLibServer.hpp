@@ -1,21 +1,21 @@
+//#include <HttpServer.hpp>
 #include <GenericServer.hpp>
 #include <CoreConfigManager.hpp>
+
 #include <httplib.h>
 #include <tojson.hpp>
+
+#ifndef __HTTP_LIB_SERVER__
+#define __HTTP_LIB_SERVER__
 
 namespace server
 {
 
-  // class HttpLibServerCallback {
-  //   virtual void notification_callback(HttpLibServer *obj, int eventId, void* msgData);
-  // };
-  
-  // class HttpLibServer : public GenericServer<HttpLibServerCallback>, HttpLibServerCallback {
   class HttpLibServer : public GenericServer<HttpLibServer> {
     
     public:
-      HttpLibServer();
-      HttpLibServer(std::string ip, int port);
+      HttpLibServer(config::CoreConfigManager &config);
+      HttpLibServer(const std::string  &ip, int port, config::CoreConfigManager &configMnger);
       ~HttpLibServer();
 
       int start();
@@ -29,22 +29,16 @@ namespace server
      * @return  0 on sucess
      */
       int configureCustomApis(std::map<std::string, nlohmann::json> map);
-      
       /**
      * @brief This notification callback to be called by notification_callback_generic
      */
       void notification_callback(HttpLibServer *obj, int eventId, void* msgData);
 
-      void setConfigManager(config::CoreConfigManager *config);
-      config::CoreConfigManager getConfigManager();
-
     private:
-      httplib::Server *svr;
+      std::shared_ptr<httplib::Server> srv = nullptr;
       std::string ip;
       int port;
-      config::CoreConfigManager *configMnger; /**< pointer to the config manager used internally to be passed using setConfigManager*/
+      config::CoreConfigManager &configMnger;
   };
-
-  typedef void (*function_ptr)(HttpLibServer* obj, int eventId, void* data);
-
 }
+#endif /*__HTTP_LIB_SERVER__*/

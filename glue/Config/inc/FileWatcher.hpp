@@ -1,13 +1,16 @@
 #include <ConfigWatcher.hpp>
 #include <FileWatch.hpp>
 
+#ifndef __FILE_WATCHER__
+#define __FILE_WATCHER__
+
 namespace config
 {  
 
   class FileWatcher : ConfigWatcher
   {
     public:
-      FileWatcher(std::string fileWatched);
+      FileWatcher(const std::string &fileWatched);
       ~FileWatcher();
       
       int start() override;
@@ -15,7 +18,7 @@ namespace config
       int stop() override;
       int restart() override;
       
-      int register_callback(int msgType, void* obj, function_ptr_generic function_pointer) override;
+      int register_callback(int msgType, void* obj, NotificationCallback function_pointer) override;
 
     private:
 
@@ -25,5 +28,6 @@ namespace config
       std::string fileWatched; /**< the full path to the config file of the server */
       filewatch::FileWatch<std::string> *filewatcher; /**< pointer to the filewatch::FileWatch lib to monitor the config file */
   };
-
 }
+
+#endif /*__FILE_WATCHER__*/

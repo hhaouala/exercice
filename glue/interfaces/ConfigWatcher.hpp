@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <functional>
 
 #ifndef __CONFIG_WATCHER__
 #define __CONFIG_WATCHER__
@@ -11,8 +12,8 @@
 namespace config
 {  
 
-  typedef void (*function_ptr_generic)(void* obj, int eventId, void* data);
-  using CallbackVector = std::vector<std::vector<std::pair<void*,function_ptr_generic>>*>;
+  using NotificationCallback = std::function<void(void *obj, int, void*)>;
+  using CallbackVector = std::vector<std::vector<std::pair<void*,NotificationCallback>>>;
 
   /**
    * This class is meant to abstract the state machine of the monitoring
@@ -29,21 +30,20 @@ namespace config
       ConfigWatcher(){}
       virtual ~ConfigWatcher(){}
       
-      virtual int start() = 0;
-      virtual int configure() = 0;
-      virtual int stop() = 0;
-      virtual int restart() = 0;
+      virtual int start() {}
+      virtual int configure() {}
+      virtual int stop() {}
+      virtual int restart() {}
 
 
      /**
      * @brief This API will pass the funtion pointer to the config watcher which will
      * be called when the event msgType is received in the condig watcher
        @param [in] msgType : the message to be notifuied on
-       @param [in,out] obj : pointer on the object needing the notification (not thread safe)
        @param [in] function_pointer : the notification function to be called once the event (msgType) takes place
      * @return  0 on sucess
      */
-      virtual int register_callback(int msgType, void* obj, function_ptr_generic function_pointer) = 0;
+      virtual int register_callback(int msgType, void* obj, NotificationCallback function_pointer) {}
 
   };
 

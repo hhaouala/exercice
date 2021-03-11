@@ -6,16 +6,16 @@ using namespace tojson;
 
 namespace config
 {
-  template<typename DATA_HOLDER>  
-  YAMLtoJsonConfigManager<DATA_HOLDER>::YAMLtoJsonConfigManager(std::string configFile) 
+  //template<typename DATA_HOLDER>  
+  YAMLtoJsonConfigManager::YAMLtoJsonConfigManager(std::string configFile) 
     : configFile(configFile),
       globalConfig("")
   {
 
   }
 
-  template<typename DATA_HOLDER>
-  YAMLtoJsonConfigManager<DATA_HOLDER>::~YAMLtoJsonConfigManager()
+  //template<typename DATA_HOLDER>
+  YAMLtoJsonConfigManager::~YAMLtoJsonConfigManager()
   {
     stop();
   }
@@ -53,20 +53,20 @@ namespace config
     return 0;
   }
   
-  template<typename DATA_HOLDER>
-  int YAMLtoJsonConfigManager<DATA_HOLDER>::start()
+ // template<typename DATA_HOLDER>
+  int YAMLtoJsonConfigManager::start()
   {
     
   }
   
-  template<typename DATA_HOLDER>
-  int YAMLtoJsonConfigManager<DATA_HOLDER>::stop()
+  //template<typename DATA_HOLDER>
+  int YAMLtoJsonConfigManager::stop()
   {
     return 0;
   }
   
-  template<typename DATA_HOLDER>
-  int YAMLtoJsonConfigManager<DATA_HOLDER>::restart()
+ // template<typename DATA_HOLDER>
+  int YAMLtoJsonConfigManager::restart()
   {
     int ret = 0;
     ret |= stop();
@@ -75,13 +75,15 @@ namespace config
     return ret;
   }
 
-  template<typename DATA_HOLDER>
-  int YAMLtoJsonConfigManager<DATA_HOLDER>::configure()
+  //template<typename DATA_HOLDER>
+  int YAMLtoJsonConfigManager::configure()
   {
     apiMap.clear();
     try {
+    std::cout << "########## before loadyaml " << globalConfig.dump() << std::endl;
       globalConfig = loadyaml(configFile);
 
+      std::cout << "##########  " << globalConfig.dump() << std::endl;
       store_paths(globalConfig["paths"], apiMap);
       
       return 0;
@@ -94,11 +96,9 @@ namespace config
     return 0;
   }
 
-  template<typename DATA_HOLDER>
-  int YAMLtoJsonConfigManager<DATA_HOLDER>::getApis(DATA_HOLDER &map)
+  //template<typename DATA_HOLDER>
+  int YAMLtoJsonConfigManager::getApis(std::map<std::string, nlohmann::json> &map)
   {
     map = apiMap;
   }
-
-
 }

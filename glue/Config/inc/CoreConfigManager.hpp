@@ -1,16 +1,18 @@
 #include <GenericConfigManager.hpp>
-#include <ConfigWatcher.hpp>
-
+#include <YAMLtoJsonConfigManager.hpp>
+#include <FileWatcher.hpp>
 #include <tojson.hpp>
 
+#ifndef __CORE_CONFIG_MANAGER__
+#define __CORE_CONFIG_MANAGER__
 
 namespace config
 {
-  class CoreConfigManager : GenericConfigManager
+  class CoreConfigManager : YAMLtoJsonConfigManager
   {
     public:
-      CoreConfigManager();
-      CoreConfigManager(std::string config);
+      CoreConfigManager(FileWatcher &watcher);
+      CoreConfigManager(FileWatcher &watcher, const std::string &config);
       ~CoreConfigManager();
 
       int start() override;
@@ -19,12 +21,9 @@ namespace config
       int restart() override;
       int getApis(std::map<std::string, nlohmann::json> &map) override;
       
-      void setConfigWatcher(ConfigWatcher* config_watcher);
-      ConfigWatcher* getConfigWatcher();
-
     private:
-      GenericConfigManager *real_engine; /**< pointer to the config parser engine used : toJson + yaml-cpp */
-      ConfigWatcher *watcher; /**< pointer to the ConfigWatcher used internally to be passed using setConfigWatcher*/
+      FileWatcher &watcher; /**< reference to the ConfigWatcher used internally to be passed using setConfigWatcher*/
   };
-
 }
+
+#endif /*__CORE_CONFIG_MANAGER__*/

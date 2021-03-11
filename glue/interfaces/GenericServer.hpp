@@ -1,3 +1,8 @@
+#include <iostream>
+#include <functional>
+
+#ifndef __GENERIC_SERVER__
+#define __GENERIC_SERVER__
 
 /** \ingroup server */
 /** \addtogroup server
@@ -5,6 +10,10 @@
 */
 namespace server
 {
+
+  template <class ServerType>
+  using NotificationCallback = std::function<void(ServerType *obj, int, void*)>;
+
   /**
    * This class is meant to abstract the state machine of the server
    * framework/lib (like cpp-http) and its APIs/configuration.
@@ -43,12 +52,20 @@ namespace server
      * @param [in,out] msgData : pointer to use when trying to pass data
      * @return  0 on sucess
      */
-      static void notification_callback_generic(ServerType *obj, int eventID, void* msgData)
+      static void notification_callback_generic(void *obj, int eventID, void* msgData)
       {
+	ServerType *newObj = (ServerType*) obj;
+        newObj->notification_callback(newObj, eventID, msgData);
+      };
+
+      server::NotificationCallback<ServerType> f = [=](ServerType *obj, int eventID, void* msgData) {
         obj->notification_callback(obj, eventID, msgData);
       };
+      
       
   };
 
 }
 /** @} end of group server */
+
+#endif /*__GENERIC_SERVER__*/

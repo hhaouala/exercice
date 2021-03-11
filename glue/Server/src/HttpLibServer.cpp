@@ -5,17 +5,28 @@ using namespace httplib;
 
 namespace server
 {
-
-  HttpLibServer::HttpLibServer() : ip("127.0.0.1"), port(9898)
+  HttpLibServer::HttpLibServer(config::CoreConfigManager &config) : ip("127.0.0.1"), port(9898), configMnger(config)
   {
-    if (!svr)
-      svr = new Server();
+    try
+    {
+      srv = std::make_shared<httplib::Server>();
+    }
+    catch(const std::bad_alloc& e)
+    {
+      std::cerr << e.what() << std::endl;
+    }
   }
 
-  HttpLibServer::HttpLibServer(std::string ip, int port) : ip(ip), port(port)
+  HttpLibServer::HttpLibServer(const std::string &ip, int port, config::CoreConfigManager &config) : ip(ip), port(port), configMnger(config)
   {
-      if (!svr)
-      svr = new Server();
+    try
+    {
+      srv = std::make_shared<httplib::Server>();
+    }
+    catch(const std::bad_alloc& e)
+    {
+      std::cerr << e.what() << std::endl;
+    }
   }
 
   HttpLibServer::~HttpLibServer()
@@ -25,26 +36,36 @@ namespace server
 
   int HttpLibServer::start()
   {
-    if (!svr)
-      svr = new Server();
+    if (srv == nullptr)
+    {
+      try
+      {
+        srv = std::make_shared<httplib::Server>();
+      }
+      catch(const std::bad_alloc& e)
+      {
+        std::cerr << e.what() << std::endl;
+        return -1;
+      }
 
+    }
     auto ret = false;
-    if (! svr->is_running()){
+    if (! srv->is_running()){
       std::cout << "starting server on " << ip << ":" << port<< std::endl;
-      ret = svr->listen(ip.c_str(), port);
+      ret = srv->listen(ip.c_str(), port);
     }
     return (ret) ? 0 : -1;
   }
 
   int HttpLibServer::stop()
   {
-    if (svr)
+    if (srv)
     {
-      if (svr->is_running()){
+      if (srv->is_running()){
         std::cout << "stopping server" << std::endl;
-        svr->stop();
+        srv->stop();
       }
-      delete svr;
+      srv.reset();
     }
     return 0;
   }
@@ -54,27 +75,35 @@ namespace server
     int ret = 0;
     stop();
     ret |= configure();
-    if (configMnger){
-      ret |= configMnger->restart();
-      std::map<std::string, nlohmann::json> apiList;
-      ret |= configMnger->getApis(apiList);
-      ret |= configureCustomApis(apiList);
-    }
+    ret |= configMnger.restart();
+    std::map<std::string, nlohmann::json> apiList;
+    ret |= configMnger.getApis(apiList);
+    ret |= configureCustomApis(apiList);
     ret |= start();
     return ret;
   }
 
   int HttpLibServer::configureCustomApis(std::map<std::string, nlohmann::json> map)
   {
-    if (!svr)
-      svr = new Server();
+    if (srv == nullptr)
+    {
+      try
+      {
+         srv = std::make_shared<httplib::Server>();
+      }
+      catch(const std::bad_alloc& e)
+      {
+          std::cerr << e.what() << std::endl;
+          return -1;
+      }
+    }
 
     for (auto &it : map ) {
     std::cout << "Configuring Api " << it.first << std::endl;
-		svr->Get(it.first.c_str(), [](const Request& req, Response& res) {
+		srv->Get(it.first.c_str(), [](const Request& req, Response& res) {
 				//res.set_content("200 OK", "text/plain");
 				});
-		svr->Post(it.first.c_str(), [](const Request& req, Response& res) {
+		srv->Post(it.first.c_str(), [](const Request& req, Response& res) {
 				//res.set_content("200 OK", "text/plain");
 				});
 	  }
@@ -83,25 +112,23 @@ namespace server
 
   int HttpLibServer::configure()
   {
-    if (svr)
-      svr = new Server();
-
+    if (srv == nullptr)
+    {
+      try
+      {
+         srv = std::make_shared<httplib::Server>();
+      }
+      catch(const std::bad_alloc& e)
+      {
+          std::cerr << e.what() << std::endl;
+          return -1;
+      }
+    }
     return 0;
   }
 
-    void HttpLibServer::setConfigManager(config::CoreConfigManager *_config)
-    {
-        configMnger = _config;
-    }
-
-    config::CoreConfigManager HttpLibServer::getConfigManager()
-    {
-        return *configMnger;
-    }
-
     void HttpLibServer::notification_callback(HttpLibServer *obj, int eventId, void* msgData)
     {
-      HttpLibServer* cls = (HttpLibServer*) obj;
       filewatch::Event event = static_cast<filewatch::Event>(eventId);
       switch (event)
       {
@@ -114,6 +141,4 @@ namespace server
       }
       
     }
-
-
 }

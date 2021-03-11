@@ -1,6 +1,9 @@
 #include <GenericConfigManager.hpp>
 #include <tojson.hpp>
 
+#ifndef __YAML_TO_JSON_CONFIG_MANAGER__
+#define __YAML_TO_JSON_CONFIG_MANAGER__
+
 namespace config
 {
   /**
@@ -10,7 +13,7 @@ namespace config
    * parsed with the config manager. 
    *
    */  
-  template<typename DATA_HOLDER>  
+  //template<typename DATA_HOLDER>  
   class YAMLtoJsonConfigManager : GenericConfigManager
   {
     public:
@@ -22,17 +25,18 @@ namespace config
       int stop();
       int configure();
       int restart();
-      int getApis(DATA_HOLDER &map);
+      int getApis(std::map<std::string, nlohmann::json> &map);
 
 
     private:
 
       std::string configFile;
-      DATA_HOLDER apiMap;
+      std::map<std::string, nlohmann::json> apiMap;
       nlohmann::json globalConfig;
   };
 
-  template class YAMLtoJsonConfigManager<std::map<std::string, nlohmann::json>>;
-  template class YAMLtoJsonConfigManager<std::vector<std::string>>;
+  //template class YAMLtoJsonConfigManager<std::map<std::string, nlohmann::json>>;
+  //template class YAMLtoJsonConfigManager<std::vector<std::string>>;
   
 }
+#endif /*__YAML_TO_JSON_CONFIG_MANAGER__*/

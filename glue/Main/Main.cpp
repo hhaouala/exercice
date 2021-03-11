@@ -1,11 +1,10 @@
 #include <HttpLibServer.hpp>
-#include <FileWatcher.hpp>
-#include <FileWatch.hpp>
 
+using namespace std;
 using namespace config;
 using namespace server;
 
-volatile std::atomic<bool> quit(false);    // signal flag
+volatile ::atomic<bool> quit(false);    // signal flag
 
 void got_signal(int)
 {
@@ -20,13 +19,14 @@ void set_signal_handler(){
 }
 
 inline bool check_file (const std::string& name) {
-    return ( access( name.c_str(), F_OK ) != -1 );
+    ifstream f(name.c_str());
+    return f.good();
 }
 
 int main(int argc,char *argv[])
 {
   std::map<std::string, nlohmann::json> apiList;
-  char configFile[200] = {0};
+  char configFile[200] = {0}; //  not aligned size
   int c=0;
 
   while ((c = getopt (argc, argv, "i:h:")) != -1)
@@ -55,12 +55,14 @@ int main(int argc,char *argv[])
     break;
   }
 
-  CoreConfigManager config(configFile);
+  // Could be handled on only one object 
+  
   FileWatcher filewatcher(configFile);
-  HttpLibServer server;
+  CoreConfigManager config(filewatcher, configFile);
+  HttpLibServer server(config);
 
-  filewatcher.register_callback((int)filewatch::Event::modified, (void*)&server, (function_ptr_generic) server.notification_callback_generic);
-  config.setConfigWatcher((ConfigWatcher*)&filewatcher);
+  //This could be a lambda
+  filewatcher.register_callback((int)filewatch::Event::modified, (void*)&server, server.notification_callback_generic);
   config.configure();
   config.getApis(apiList);
 
@@ -68,12 +70,15 @@ int main(int argc,char *argv[])
     std::cout << "main: got api " << it.first << std::endl;
   }
   
-  server.setConfigManager(&config);
-  server.configure();
+  //server.setConfigManager(&config);
+  //config.setConfigWatcher((ConfigWatcher*)&filewatcher);
+
+  server.configure(); 
   server.configureCustomApis(apiList);
   
   config.start();
   server.start();
+
 
   while (true)
   {

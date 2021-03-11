@@ -1,0 +1,50 @@
+--- Config/src/FileWatcher.cpp
++++ Config/src/FileWatcher.cpp
+@@ -13,40 +13,29 @@ namespace config
+   FileWatcher::~FileWatcher()
+   {
+     stop();
+-    if (filewatcher)
+-      delete filewatcher;
+-
+   }
+ 
+   int FileWatcher::start()
+   {
+-
+   }
+ 
+   int FileWatcher::configure()
+   {
+-
+     filewatcher = new filewatch::FileWatch<std::string>(fileWatched, 
+       [this](const std::string& file, const filewatch::Event event_type) {
+         switch (event_type)
+         {
+         case filewatch::Event::modified:
+           std::cout << "The file was modified. This can be a change in the time stamp or attributes." << '\n';
+-          std::unique_lock<std::mutex> lk(this->v_mtx);
+-          if (!this->callbacks_for_event[(int)event_type]) {
+-              std::cout << "== No callbacks for msgType " << (int)event_type << std::endl ;
+-          }
+-          else
+-          {
+-            std::cout << "== found callbacks for msgType" << (int)event_type << std::endl ;
+-            //for (const std::pair<void*,function_ptr_generic> x : this->callbacks_for_event[(int)event_type])
+-            auto x = this->callbacks_for_event[(int)event_type];
+-            for (auto x : *(this->callbacks_for_event[(int)event_type]) )
+-              x.second(x.first, (int)event_type, nullptr);
+-          }
++          //std::unique_lock<std::mutex> lk(this->v_mtx);
++          this->v_mtx.lock();
++          std::cout << "== found callbacks for msgType" << (int)event_type << std::endl ;
++          auto x = this->callbacks_for_event[(int)event_type];
++          for (auto x : this->callbacks_for_event[(int)event_type] )
++              x((int)event_type, nullptr);
++          this->v_mtx.unlock();
+           break;
+         };
+-        
+       }
+     );
+   }
